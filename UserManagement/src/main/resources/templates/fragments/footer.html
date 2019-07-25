@@ -1,0 +1,65 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+	<div th:fragment="footer">
+	<div class="container text-white bg-dark p-4">
+      <div class="row">
+        <div class="col-6 col-md-8 col-lg-7">
+          <div class="row text-center">
+            <div class="col-sm-6 col-md-4 col-lg-4 col-12">
+              <ul class="list-unstyled">
+                <li class="btn-link"> <a>Link anchor</a> </li>
+               
+              </ul>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-4 col-12">
+              <ul class="list-unstyled">
+                <li class="btn-link"> <a>Link anchor</a> </li>
+               
+              </ul>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-4 col-12">
+              <ul class="list-unstyled">
+                <li class="btn-link"> <a>Link anchor</a> </li>
+               
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-5 col-6">
+          <address>
+            <strong>User management, Inc.</strong><br>
+            Беларусь<br>
+            Новолукомль Заводская 211162<br>
+            <abbr title="МТС">Телефон:</abbr> +375 0000000
+          </address>
+          <address>
+            <strong>Malashkin Alexsey</strong><br>
+            <a href="mailto:#">novolukoml@graver24.by</a>
+          </address>
+        </div>
+      </div>
+    </div>
+		<footer class="text-center">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<p>Copyright © Alexsey Malashkin. All rights reserved.</p>
+					</div>
+				</div>
+			</div>
+			
+		<script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"
+			href="../../js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" th:src="@{/js/popper.min.js}"
+			href="../../js/popper.min.js"></script>
+			<script type="text/javascript" th:src="@{/js/bootstrap-4.0.0.js}"
+			href="../../js/bootstrap-4.0.0.js"></script>
+		</footer>
+		
+	</div>
+</body>
+</html>
