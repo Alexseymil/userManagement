@@ -27,9 +27,7 @@
 						<label for="location1" class="col-form-label">Роль</label> <select
 							class="form-control" th:name="category" id="location1">
 							<option></option>
-							<option th:each="userRole : ${allRole}"
-								th:value="${categoryProduct.categoryId}"
-								th:utext="${categoryProduct.nameCategory}" />
+							
 						</select>
 					</div>
 					<p class="text-center">

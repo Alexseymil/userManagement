@@ -15,7 +15,7 @@
 			<div class="col-12 card bg-light mx-auto">
 				<h3 class="text-center card-header">Изменить пользователя</h3>
 				<form class="card-body" action="#"
-					th:action="@{/update/{id}(id=${user.userId})}" th:object="${user}"
+					th:action="@{/update/{id}(id=${userAccount.userId})}" th:object="${userAccount}"
 					method="post">
 					<div class="form-group row">
 						<label for="priceto3" class="col-form-label">Логин</label>

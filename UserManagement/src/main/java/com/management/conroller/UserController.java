@@ -3,6 +3,7 @@ package com.management.conroller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +19,9 @@ public class UserController {
 
 	@Autowired
 	private UserCrudRepository userCrudRepository;
+	
+	@Autowired 
+	private BCryptPasswordEncoder encoder;
 
 	@GetMapping("/user")
 	public String allUser(Model model) {
@@ -48,6 +52,8 @@ public class UserController {
 			return "New";
 		}
 
+		String encryptedPassword = encoder.encode(userAccount.getUserPassword());
+		userAccount.setUserPassword(encryptedPassword);
 		userCrudRepository.save(userAccount);
 		model.addAttribute("allUsers", userCrudRepository.findAll());
 		return "List";
@@ -71,7 +77,7 @@ public class UserController {
 	public String editUser(@PathVariable("id") long id, Model model) {
 		UserAccount user = userCrudRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-		model.addAttribute("user", user);
+		model.addAttribute("userAccount", user);
 		return "Edit";
 	}
 
@@ -81,7 +87,9 @@ public class UserController {
 			user.setUserId(id);
 			return "Edit";
 		}
-
+		String encryptedPassword = encoder.encode(user.getUserPassword());
+		user.setUserPassword(encryptedPassword);
+		user.setUserId(id);
 		userCrudRepository.save(user);
 		model.addAttribute("allUsers", userCrudRepository.findAll());
 		return "List";

@@ -20,7 +20,7 @@ public class UserAccount {
 	@Size(min = 3, max = 16)
 	private String userName;
 
-	@Size(min = 3, max = 16)
+	@Size(min = 3, max = 60)
 
 	private String userPassword;
 
