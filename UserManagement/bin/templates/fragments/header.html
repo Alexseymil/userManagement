@@ -41,7 +41,7 @@
 						
 						<div th:if="${#httpServletRequest.remoteUser} != null">
 							<li class="nav-item"><a class="nav-link disabled"
-								th:href="@{/user/new}">Добавить пользователя</a></li>
+								th:href="@{/new}">Добавить пользователя</a></li>
 						</div>
 						<div th:if="${#httpServletRequest.remoteUser} != null">
 							<li class="nav-item"><a class="nav-link disabled" th:href="@{/logout}">Выйти</a></li>

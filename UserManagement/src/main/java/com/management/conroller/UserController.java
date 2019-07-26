@@ -1,5 +1,6 @@
 package com.management.conroller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class UserController {
 
 	@Autowired
 	private UserCrudRepository userCrudRepository;
-	
-	@Autowired 
+
+	@Autowired
 	private BCryptPasswordEncoder encoder;
 
 	@GetMapping("/user")
@@ -47,13 +48,17 @@ public class UserController {
 	}
 
 	@PostMapping("/adduser")
-	public String addUser(@Valid UserAccount userAccount, BindingResult result, Model model) {
+	public String addUser(@Valid UserAccount userAccount, BindingResult result, Model model,
+			HttpServletRequest request) {
 		if (result.hasErrors()) {
 			return "New";
 		}
 
 		String encryptedPassword = encoder.encode(userAccount.getUserPassword());
 		userAccount.setUserPassword(encryptedPassword);
+		if (request.getParameter("Lock") == null) {
+			userAccount.setStatus(true);
+		}
 		userCrudRepository.save(userAccount);
 		model.addAttribute("allUsers", userCrudRepository.findAll());
 		return "List";
@@ -77,18 +82,23 @@ public class UserController {
 	public String editUser(@PathVariable("id") long id, Model model) {
 		UserAccount user = userCrudRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+
 		model.addAttribute("userAccount", user);
 		return "Edit";
 	}
 
 	@PostMapping("/update/{id}")
-	public String updateUser(@PathVariable("id") long id, @Valid UserAccount user, BindingResult result, Model model) {
+	public String updateUser(@PathVariable("id") long id, @Valid UserAccount user, BindingResult result, Model model,
+			HttpServletRequest request) {
 		if (result.hasErrors()) {
 			user.setUserId(id);
 			return "Edit";
 		}
 		String encryptedPassword = encoder.encode(user.getUserPassword());
 		user.setUserPassword(encryptedPassword);
+		if (request.getParameter("Lock") == null) {
+			user.setStatus(true);
+		}
 		user.setUserId(id);
 		userCrudRepository.save(user);
 		model.addAttribute("allUsers", userCrudRepository.findAll());
