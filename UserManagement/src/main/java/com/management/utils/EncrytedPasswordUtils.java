@@ -10,7 +10,7 @@ public class EncrytedPasswordUtils {
         return encoder.encode(password);
     }
     public static void main(String [] args) {
-    	String password = "4";
+    	String password = "9";
     	System.out.println(password);
     	password = encrytePassword(password);
     	System.out.println(password);
