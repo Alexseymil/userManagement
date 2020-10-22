@@ -33,6 +33,14 @@ public class UserController {
         return "List";
     }
 
+    @GetMapping("/sort")
+    public String allUserSort(Model model){
+
+        model.addAttribute("allUser", userCrudRepository.findAll());
+
+        return "List";
+    }
+
     @GetMapping("/user/{id}")
     public String infoUser(@PathVariable(value = "id") Long id, Model model) {
         UserAccount user = userCrudRepository.findById(id)
