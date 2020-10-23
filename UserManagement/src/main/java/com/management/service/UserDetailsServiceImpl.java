@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.management.model.UserAccount;
@@ -21,13 +22,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserCrudRepository userCrudRepository;
 
+	@Autowired
+	private BCryptPasswordEncoder encoder;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, AccessDeniedException {
-		UserAccount user = userCrudRepository.findByUserName(username);
+		UserAccount user = userCrudRepository.findByUserName(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User " + username + " was not found in the database"));
 
-		if (user == null) {
-			throw new UsernameNotFoundException("User " + username + " was not found in the database");
-		}
 		if (!user.isStatus()) {
 			throw new AccessDeniedException("User " + username + " was not INACTIVE");
 		}
@@ -46,5 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 		return userDetails;
 	}
+
+
 
 }

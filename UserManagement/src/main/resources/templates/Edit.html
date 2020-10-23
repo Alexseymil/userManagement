@@ -54,6 +54,9 @@
 							th:errors="*{lastName}">LastName Error</div>
 					</div>
 					<div class="form-group row">
+					<p>Date Field: <input type="datetime-local" th:field="*{createAt}" /></p>
+					</div>
+					<div class="form-group row">
 						<label for="location1" class="col-form-label">Роль</label> <select
 							name="role" th:field="*{role}" class="form-control">
 							<option value="ROLE_ADMIN">admin</option>

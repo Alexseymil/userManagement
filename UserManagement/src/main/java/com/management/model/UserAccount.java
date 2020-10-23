@@ -1,5 +1,9 @@
 package com.management.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -9,139 +13,144 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+//@JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE,
+//        isGetterVisibility = JsonAutoDetect.Visibility.NONE)
 @Entity
 @Table
 public class UserAccount {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long userId;
-	
-	@Size(min = 3, max = 16)
-	private String userName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @JsonIgnore
+    private Long userId;
 
-	@Size(min = 3, max = 60)
+    @Size(min = 3, max = 16)
+    private String userName;
 
-	private String userPassword;
+    @Size(min = 3, max = 60)
 
-	@Size(min = 1, max = 16)
-	private String firstName;
+    private String userPassword;
 
-	@Size(min = 1, max = 16)
-	private String lastName;
+    @Size(min = 1, max = 16)
+    private String firstName;
 
-	private String role;
+    @Size(min = 1, max = 16)
+    private String lastName;
 
-	private boolean status;
-	
-	private Date createAt = new Date();
-	
-	public UserAccount() {
-	}
+    private String role;
 
-	public UserAccount(String userName, String userPassword, String firstName, String lastName, String role) {
-		super();
-		this.userName = userName;
-		this.userPassword = userPassword;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.role = role;
-	}
+    private boolean status;
 
-	public Long getUserId() {
-		return userId;
-	}
+    private Date createAt = new Date();
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    public UserAccount() {
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public UserAccount(String userName, String userPassword, String firstName, String lastName, String role) {
+        super();
+        this.userName = userName;
+        this.userPassword = userPassword;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public Long getUserId() {
+        return userId;
+    }
 
-	public String getUserPassword() {
-		return userPassword;
-	}
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+  //  @JsonProperty
+    public String getUserName() {
+        return userName;
+    }
 
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public String getUserPassword() {
+        return userPassword;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+  //  @JsonProperty(value = "Harry Poter")
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+  //  @JsonProperty
+    public String getLastName() {
+        return lastName;
+    }
 
-	public String getRole() {
-		return role;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public void setRole(String role) {
-		this.role = role;
-	}
+    public String getRole() {
+        return role;
+    }
 
-	public boolean isStatus() {
-		return status;
-	}
+    public void setRole(String role) {
+        this.role = role;
+    }
 
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
 
-	public Date getCreateAt() {
-		return createAt;
-	}
+    public boolean isStatus() {
+        return status;
+    }
 
-	public void setCreateAt(Date createAt) {
-		this.createAt = createAt;
-	}
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
-		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
-		return result;
-	}
+    public Date getCreateAt() {
+        return createAt;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UserAccount other = (UserAccount) obj;
-		if (userId == null) {
-			if (other.userId != null)
-				return false;
-		} else if (!userId.equals(other.userId))
-			return false;
-		if (userName == null) {
-			if (other.userName != null)
-				return false;
-		} else if (!userName.equals(other.userName))
-			return false;
-		return true;
-	}
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
 
-	
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+        result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        UserAccount other = (UserAccount) obj;
+        if (userId == null) {
+            if (other.userId != null)
+                return false;
+        } else if (!userId.equals(other.userId))
+            return false;
+        if (userName == null) {
+            if (other.userName != null)
+                return false;
+        } else if (!userName.equals(other.userName))
+            return false;
+        return true;
+    }
+
+
 }

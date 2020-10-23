@@ -1,108 +1,132 @@
 package com.management.conroller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import com.management.exception.IdIsCreatedException;
+import com.management.model.UserAccount;
+import com.management.repositories.UserCrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import com.management.model.UserAccount;
-import com.management.repositories.UserCrudRepository;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 public class UserController {
 
-	@Autowired
-	private UserCrudRepository userCrudRepository;
+    @Autowired
+    private UserCrudRepository userCrudRepository;
 
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
-	@GetMapping("/user")
-	public String allUser(Model model) {
+    @GetMapping("/user")
+    public String allUser(Model model) {
+        getAllUsers(model);
+        return "List";
+    }
 
-		model.addAttribute("allUsers", userCrudRepository.findAll());
+    @PostMapping("/sort")
+    public String allUserSort(Model model, HttpServletRequest request) {
+        String role = request.getParameter("role");
+        model.addAttribute("allUsers", userCrudRepository.findAllByRole(role));
+        return "List";
+    }
 
-		return "List";
-	}
+    @GetMapping("/userName")
+    @ResponseBody
+    public UserAccount getUserName(@RequestParam(name = "name") String name) {
+        return userCrudRepository.findByUserName(name)
+                .orElseThrow(() -> new UsernameNotFoundException("User " + name + " was not found in the database"));
+    }
 
-	@GetMapping("/user/{id}")
-	public String infoUser(@PathVariable(value = "id") Long id, Model model) {
-		UserAccount user = userCrudRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-		model.addAttribute("user", user);
+    @ResponseBody
+    @PostMapping("/addUserN")
+    UserAccount save(@RequestBody UserAccount userAccount) {
+        userAccount.setUserPassword(encoder.encode(userAccount.getUserPassword()));
+        return userCrudRepository.save(userAccount);
+    }
 
-		return "View";
-	}
+    @GetMapping("/user/{id}")
+    public String infoUser(@PathVariable(value = "id") Long id, Model model) {
+        UserAccount user = userCrudRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        model.addAttribute("user", user);
 
-	@GetMapping("/new")
-	public String addUser(UserAccount userAccount) {
+        return "View";
+    }
 
-		return "New";
-	}
+    @GetMapping("/new")
+    public String addUser(UserAccount userAccount) {
 
-	@PostMapping("/adduser")
-	public String addUser(@Valid UserAccount userAccount, BindingResult result, Model model,
-			HttpServletRequest request) {
-		if (result.hasErrors()) {
-			return "New";
-		}
+        return "New";
+    }
 
-		String encryptedPassword = encoder.encode(userAccount.getUserPassword());
-		userAccount.setUserPassword(encryptedPassword);
-		if (request.getParameter("Lock") == null) {
-			userAccount.setStatus(true);
-		}
-		userCrudRepository.save(userAccount);
-		model.addAttribute("allUsers", userCrudRepository.findAll());
-		return "List";
-	}
+    @PostMapping("/adduser")
+    public String addUser(@Valid UserAccount userAccount, BindingResult result, Model model,
+                          HttpServletRequest request) throws IdIsCreatedException {
+        if(userCrudRepository.findById(userAccount.getUserId()).isPresent()){
+            throw new IdIsCreatedException("This id is found");
+        }
+        if (result.hasErrors()) {
+            return "New";
+        }
+        userAccount.setUserPassword(encoder.encode(userAccount.getUserPassword()));
+        if (request.getParameter("Lock") == null) {
+            userAccount.setStatus(true);
+        }
+        userCrudRepository.save(userAccount);
+        getAllUsers(model);
+        return "List";
+    }
 
-	@GetMapping("/403")
-	public String error403() {
-		return "/error/403";
-	}
+    @GetMapping("/403")
+    public String error403() {
 
-	@GetMapping("/delete/{id}")
-	public String deleteUser(@PathVariable("id") long id, Model model) {
-		UserAccount user = userCrudRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-		userCrudRepository.delete(user);
-		model.addAttribute("allUsers", userCrudRepository.findAll());
-		return "List";
-	}
+        return "/error/403";
+    }
 
-	@GetMapping("/edit/{id}")
-	public String editUser(@PathVariable("id") long id, Model model) {
-		UserAccount user = userCrudRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") long id, Model model) {
+        UserAccount user = userCrudRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        userCrudRepository.delete(user);
+        getAllUsers(model);
+        return "List";
+    }
 
-		model.addAttribute("userAccount", user);
-		return "Edit";
-	}
+    @GetMapping("/edit/{id}")
+    public String editUser(@PathVariable("id") long id, Model model) {
+        UserAccount user = userCrudRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
 
-	@PostMapping("/update/{id}")
-	public String updateUser(@PathVariable("id") long id, @Valid UserAccount user, BindingResult result, Model model,
-			HttpServletRequest request) {
-		if (result.hasErrors()) {
-			user.setUserId(id);
-			return "Edit";
-		}
-		String encryptedPassword = encoder.encode(user.getUserPassword());
-		user.setUserPassword(encryptedPassword);
-		if (request.getParameter("Lock") == null) {
-			user.setStatus(true);
-		}
-		user.setUserId(id);
-		userCrudRepository.save(user);
-		model.addAttribute("allUsers", userCrudRepository.findAll());
-		return "List";
-	}
+        model.addAttribute("userAccount", user);
+        return "Edit";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateUser(@PathVariable("id") long id, @Valid UserAccount user, BindingResult result, Model model,
+                             HttpServletRequest request) {
+        if (result.hasErrors()) {
+            user.setUserId(id);
+            return "Edit";
+        }
+        user.setUserPassword(encoder.encode(user.getUserPassword()));
+        if (request.getParameter("Lock") == null) {
+            user.setStatus(true);
+        }
+        user.setUserId(id);
+        userCrudRepository.save(user);
+        model.addAttribute("allUsers", userCrudRepository.findAll());
+        return "List";
+    }
+
+    public void getAllUsers(Model model) {
+        model.addAttribute("allUsers", userCrudRepository.findAll());
+    }
 
 }
