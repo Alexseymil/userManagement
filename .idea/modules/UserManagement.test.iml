@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
-  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="" externalSystemModuleType="sourceSet" externalSystemModuleVersion="unspecified" linkedProjectId="UserManagement:test" linkedProjectPath="$MODULE_DIR$/../../UserManagement" rootProjectPath="$MODULE_DIR$/../../UserManagement" />
   <component name="TestModuleProperties" production-module="UserManagement.main" />
 </module>

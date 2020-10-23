@@ -37,9 +37,28 @@
 				</form>
 			</div>
 
+			<div class="col-12 card bg-light mx-auto">
+				<h3 class="text-center card-header">Поиск по пораметрам</h3>
+				<form class="card-body" action="#" th:action="@{/user/{id}(id = ${userId})}"
+					  method="get">
+					<div class="form-group row">
+						<label for="priceto3"  class="col-form-label">id</label>
+						<div class="input-group">
+							<input type="number" th:id="id" class="form-control" id="id"
+								      aria-describedby="basic-addon2">
+						</div>
+					</div>
+					<p class="text-center">
+						<button type="submit" class="btn btn-danger" id="button">Найти
+						</button>
+					</p>
+				</form>
+			</div>
+
 			<div class="col-md-4 pb-1 pb-md-0" th:each="users : ${allUsers}">
 				<div class="card">
 					<div class="card-body">
+						<h5 class="card-title" th:text="${users.userId}">ID</h5>
 						<h5 class="card-title" th:text="${users.firstName}">Имя</h5>
 						<h5 class="card-title" th:text="${users.lastName}">Фамилия</h5>
 						<h5 class="card-title" th:text="${users.createAt}">Дата регистрации</h5>

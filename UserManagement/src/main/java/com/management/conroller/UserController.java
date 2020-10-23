@@ -1,20 +1,19 @@
 package com.management.conroller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
+import com.management.exception.IdIsCreatedException;
+import com.management.model.UserAccount;
+import com.management.repositories.UserCrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import com.management.model.UserAccount;
-import com.management.repositories.UserCrudRepository;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.security.Principal;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 public class UserController {
@@ -27,18 +26,29 @@ public class UserController {
 
     @GetMapping("/user")
     public String allUser(Model model) {
-
-        model.addAttribute("allUsers", userCrudRepository.findAll());
-
+        getAllUsers(model);
         return "List";
     }
 
-    @GetMapping("/sort")
-    public String allUserSort(Model model){
-
-        model.addAttribute("allUser", userCrudRepository.findAll());
-
+    @PostMapping("/sort")
+    public String allUserSort(Model model, HttpServletRequest request) {
+        String role = request.getParameter("role");
+        model.addAttribute("allUsers", userCrudRepository.findAllByRole(role));
         return "List";
+    }
+
+    @GetMapping("/userName")
+    @ResponseBody
+    public UserAccount getUserName(@RequestParam(name = "name") String name) {
+        return userCrudRepository.findByUserName(name)
+                .orElseThrow(() -> new UsernameNotFoundException("User " + name + " was not found in the database"));
+    }
+
+    @ResponseBody
+    @PostMapping("/addUserN")
+    UserAccount save(@RequestBody UserAccount userAccount) {
+        userAccount.setUserPassword(encoder.encode(userAccount.getUserPassword()));
+        return userCrudRepository.save(userAccount);
     }
 
     @GetMapping("/user/{id}")
@@ -58,18 +68,19 @@ public class UserController {
 
     @PostMapping("/adduser")
     public String addUser(@Valid UserAccount userAccount, BindingResult result, Model model,
-                          HttpServletRequest request) {
+                          HttpServletRequest request) throws IdIsCreatedException {
+        if(userCrudRepository.findById(userAccount.getUserId()).isPresent()){
+            throw new IdIsCreatedException("This id is found");
+        }
         if (result.hasErrors()) {
             return "New";
         }
-
-        String encryptedPassword = encoder.encode(userAccount.getUserPassword());
-        userAccount.setUserPassword(encryptedPassword);
+        userAccount.setUserPassword(encoder.encode(userAccount.getUserPassword()));
         if (request.getParameter("Lock") == null) {
             userAccount.setStatus(true);
         }
         userCrudRepository.save(userAccount);
-        model.addAttribute("allUsers", userCrudRepository.findAll());
+        getAllUsers(model);
         return "List";
     }
 
@@ -84,7 +95,7 @@ public class UserController {
         UserAccount user = userCrudRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         userCrudRepository.delete(user);
-        model.addAttribute("allUsers", userCrudRepository.findAll());
+        getAllUsers(model);
         return "List";
     }
 
@@ -104,8 +115,7 @@ public class UserController {
             user.setUserId(id);
             return "Edit";
         }
-        String encryptedPassword = encoder.encode(user.getUserPassword());
-        user.setUserPassword(encryptedPassword);
+        user.setUserPassword(encoder.encode(user.getUserPassword()));
         if (request.getParameter("Lock") == null) {
             user.setStatus(true);
         }
@@ -113,6 +123,10 @@ public class UserController {
         userCrudRepository.save(user);
         model.addAttribute("allUsers", userCrudRepository.findAll());
         return "List";
+    }
+
+    public void getAllUsers(Model model) {
+        model.addAttribute("allUsers", userCrudRepository.findAll());
     }
 
 }
