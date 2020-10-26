@@ -7,10 +7,11 @@ import java.util.Date;
 @Entity
 @Table
 public class UserAccount {
-
+//newBranchFix
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 //@JsonIgnore()
+    //
     private Long userId;
 
     @Size(min = 3, max = 16)
