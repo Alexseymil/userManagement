@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<meta charset="UTF-8">
+<div th:fragment="header-css">
+	<!-- this is header-css -->
+	<link rel="stylesheet" th:href="@{/css/bootstrap-4.0.0.css}"
+		href="../../css/bootstrap-4.0.0.css" />
+	<!-- <link rel="stylesheet" th:href="@{/css/simpleGridTemplate.css}"
+		href="../../css/simpleGridTemplate.css" />-->
+</div>
+</head>
+<body>
+	<div th:fragment="header">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<div class="container">
+				<a class="navbar-brand" th:href="@{/user}">Управление пользователями</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active"><a class="nav-link"
+							th:href="@{/user}">Домашняя <span class="sr-only">(current)</span></a></li>
+						<li class="nav-item"><a class="nav-link" th:href="@{/login}">Вход</a>
+						</li>
+						<li class="nav-item dropdown"><a
+							class="nav-link dropdown-toggle" th:href="@{/user}"
+							id="navbarDropdown" role="button" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false">Пользователи</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" th:href="@{/user}">Все пользователи</a> <a class="dropdown-item" href="#">Another action</a>
+								<div class="dropdown-divider"></div>
+							</div></li>
+						<li class="nav-item"><a class="nav-link disabled"
+							th:href="@{/hello}">О нас</a></li>
+						
+						<div th:if="${#httpServletRequest.remoteUser} != null">
+							<li class="nav-item"><a class="nav-link disabled"
+								th:href="@{/new}">Добавить пользователя</a></li>
+						</div>
+						<div th:if="${#httpServletRequest.remoteUser} != null">
+							<li class="nav-item"><a class="nav-link disabled" th:href="@{/logout}">Выйти</a></li>
+						</div>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+	</div>
+
+</body>
+</html>
