@@ -7,7 +7,7 @@ import java.util.Date;
 @Entity
 @Table
 public class UserAccount {
-
+//New comment
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 //@JsonIgnore()
