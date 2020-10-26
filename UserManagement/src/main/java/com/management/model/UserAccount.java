@@ -1,29 +1,19 @@
 package com.management.model;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Size;
-
-//@JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE,
-//        isGetterVisibility = JsonAutoDetect.Visibility.NONE)
 @Entity
 @Table
 public class UserAccount {
-
+    //newBranchFix
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @JsonIgnore
+//@JsonIgnore()
+    //dsfsfds
+    //dgfgd
     private Long userId;
-//newBranch
     @Size(min = 3, max = 16)
     private String userName;
 
