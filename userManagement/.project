@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>UserManagement</name>
-	<comment>Project UserManagement created by Buildship.</comment>
+	<name>userManagement</name>
+	<comment>Project userManagement created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
