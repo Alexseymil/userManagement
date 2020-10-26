@@ -7,13 +7,12 @@ import java.util.Date;
 @Entity
 @Table
 public class UserAccount {
-//newBranchFix
+    //newBranchFix
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 //@JsonIgnore()
-    //
+    //dsfsfds
     private Long userId;
-
     @Size(min = 3, max = 16)
     private String userName;
 
@@ -52,7 +51,8 @@ public class UserAccount {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-  //  @JsonProperty
+
+    //  @JsonProperty
     public String getUserName() {
         return userName;
     }
@@ -69,7 +69,8 @@ public class UserAccount {
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
     }
-  //  @JsonProperty(value = "Harry Poter")
+
+    //  @JsonProperty(value = "Harry Poter")
     public String getFirstName() {
         return firstName;
     }
@@ -77,7 +78,8 @@ public class UserAccount {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-  //@JsonProperty()
+
+    //@JsonProperty()
     public String getLastName() {
         return lastName;
     }
