@@ -7,7 +7,9 @@ import java.util.Date;
 @Entity
 @Table
 public class UserAccount {
-    //newBranchFix
+//New comment
+    //new modification
+    //new modification2
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 //@JsonIgnore()
