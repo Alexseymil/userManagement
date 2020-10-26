@@ -23,7 +23,7 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.AUTO)
 //    @JsonIgnore
     private Long userId;
-
+//newBranch
     @Size(min = 3, max = 16)
     private String userName;
 
